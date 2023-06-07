@@ -26,6 +26,13 @@ public class data {
         return this.strEntity;
     }
 
+    public int getYear(){
+        return this.intYear;
+    }
+
+    public int getNumberPub(){
+        return this.intNumberPub;
+
     
 }
 
