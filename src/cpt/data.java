@@ -22,6 +22,10 @@ public class data {
         this.intNumberPub = intNumberPub;
     }
 
+    public String getEntity(){
+        return this.strEntity;
+    }
 
+    
 }
 
