@@ -22,17 +22,34 @@ public class data {
         this.intNumberPub = intNumberPub;
     }
 
+    /*
+     * Get entity of data point
+     * 
+     * @return entity of data
+     * 
+     */
     public String getEntity(){
         return this.strEntity;
     }
 
+    /*
+     * Get year of data point
+     * 
+     * @return year
+     * 
+     */
     public int getYear(){
         return this.intYear;
     }
 
+    /*
+     * Get number of publications 
+     * 
+     * @return publications
+     * 
+     */
     public int getNumberPub(){
         return this.intNumberPub;
-
-    
+    }
 }
 
