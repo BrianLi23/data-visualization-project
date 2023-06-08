@@ -23,7 +23,7 @@ public class main{
         tempArray = strTextFile.split(",");
         if (strTextFile != null) {
             data datapoint = new data(tempArray[0], Integer.parseInt(tempArray[2]), Integer.parseInt(tempArray[3]));
-            listData.listofData.add(datapoint);
+            listData.addData(datapoint);
         }
     }
 
