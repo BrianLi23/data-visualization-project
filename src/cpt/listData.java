@@ -42,6 +42,14 @@ public class listData {
         mergeSort(listofData, "year");
     }
 
+    public int getIndex(int intNumber) {
+        return listofData.indexOf(intNumber);
+    }
+
+    public int getSize(int intNumber) {
+        return listofData.size();
+    }
+
     /*
      * Merge sort takes in an array and returns the same array, sorted.
      */
