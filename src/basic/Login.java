@@ -78,7 +78,7 @@ public class Login extends Application {
         PasswordField pwBox = new PasswordField();
         grid.add(pwBox, 1, 2);
 
-        //grid.setGridLinesVisible(true);
+        // grid.setGridLinesVisible(true);
 
         Button btn = new Button("Sign in");
         HBox hbBtn = new HBox(10);

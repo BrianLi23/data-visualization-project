@@ -7,8 +7,8 @@ import java.lang.Math;
 public class main {
 
     public static void main(String[] args) throws IOException {
-
         readData();
+
     }
 
     public static void readData() throws IOException {
