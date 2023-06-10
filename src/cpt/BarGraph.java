@@ -11,6 +11,7 @@ import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,17 +50,26 @@ public class BarGraph extends Application {
 
         // Retrieve the ArrayList object from the DataPointProvider class
         ArrayList<data> dataPoints = listData.getDataPoints();
-        dataPoints.sortYear(true);
+        sorting.sortEntity(true, dataPoints);
 
         for (data specificData : dataPoints) {
-            // Create a unique identifier for each data point (year + entity + parameter)
-            String identifier = specificData.getYear() + " | " + specificData.getEntity() + " | "
-                    + specificData.getParameter();
 
-            // Create an XYChart.Data object using the identifier and value from each
-            // DataPoint
-            XYChart.Data<String, Number> chartData = new XYChart.Data<>(identifier, specificData.getYear());
-            data.add(chartData);
+            if (!specificData.getParameter().equals("NA")) {
+                // Create a unique identifier for each data point (year + entity + parameter)
+                String identifier = specificData.getYear() + " | " + specificData.getEntity() + " | "
+                        + specificData.getDay();
+
+                // Since number is too big for int, set as BigInteger
+                BigInteger numBig = new BigInteger(specificData.getParameter());
+
+                // Find parameter on logramethic scale. (10^n)
+                double dblParameters = Math.log10(numBig.doubleValue());
+
+                // Create an XYChart. Data object using the identifier and value from each
+                // DataPoint
+                XYChart.Data<String, Number> chartData = new XYChart.Data<>(identifier, dblParameters);
+                data.add(chartData);
+            }
         }
 
         return data;
