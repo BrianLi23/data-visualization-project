@@ -18,18 +18,21 @@ public class listData {
 
         // Text file input
         BufferedReader reader = new BufferedReader(new FileReader(
-                "C:/Users/brian/github-classroom/SACHSTech/ics4u-cpt-brian-li-solo/src/cpt/datasheet.csv"));
+                "C:/Users/brian/github-classroom/SACHSTech/ics4u-cpt-brian-li-solo/src/cpt/datasheet3.csv"));
         String strTextFile = "";
         String[] tempArray;
 
+        // Read the heading first
+        strTextFile = reader.readLine();
+
         // Using while loop to read each line of text file, if readline returns null,
         // end while loop
-
         while (strTextFile != null) {
             strTextFile = reader.readLine();
             if (strTextFile != null) {
                 tempArray = strTextFile.split(",");
-                data datapoint = new data(tempArray[0], Integer.parseInt(tempArray[2]), Integer.parseInt(tempArray[3]));
+                data datapoint = new data(tempArray[0], Integer.parseInt(tempArray[1]), tempArray[2],
+                        tempArray[3], tempArray[4]);
                 addData(datapoint);
             }
         }
@@ -66,7 +69,7 @@ public class listData {
         return listofData.get(intNumber);
     }
 
-    public int getSize(int intNumber) {
+    public int getSize() {
         return listofData.size();
     }
 
@@ -144,8 +147,16 @@ public class listData {
             return dataPoint.getEntity();
         }
 
-        else if (strProperty.equals("publication")) {
-            return dataPoint.getNumberPub();
+        else if (strProperty.equals("day")) {
+            return dataPoint.getDay();
+        }
+
+        else if (strProperty.equals("parameter")) {
+            return dataPoint.getParameter();
+        }
+
+        else if (strProperty.equals("domain")) {
+            return dataPoint.getDomain();
         }
 
         else {

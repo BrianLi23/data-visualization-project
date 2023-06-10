@@ -6,7 +6,7 @@ public class data {
     private String strEntity;
     private int intYear;
     private String strDay;
-    private int intParameter;
+    private String strParameter;
     private String strDomain;
 
     /**
@@ -19,11 +19,11 @@ public class data {
      * @param strDomain    Type of Domain
      * 
      */
-    public data(String strEntity, int intYear, String strDay, int intParameter, String strDomain) {
+    public data(String strEntity, int intYear, String strDay, String strParameter, String strDomain) {
         this.strEntity = strEntity;
         this.intYear = intYear;
         this.strDay = strDay;
-        this.intParameter = intParameter;
+        this.strParameter = strParameter;
         this.strDomain = strDomain;
     }
 
@@ -63,8 +63,8 @@ public class data {
      * @return parameter
      * 
      */
-    public int getParameter() {
-        return this.intParameter;
+    public String getParameter() {
+        return this.strParameter;
     }
 
     /*
