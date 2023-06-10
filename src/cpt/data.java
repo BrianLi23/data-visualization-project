@@ -6,24 +6,24 @@ public class data {
     private String strEntity;
     private int intYear;
     private String strDay;
-    private int intParameters;
+    private int intParameter;
     private String strDomain;
 
     /**
      * Constructor for data
      * 
-     * @param strEntity     Entity of AI data
-     * @param intYear       The year of data
-     * @param strDay        Day of datapoint
-     * @param intParameters Number of parameteres
-     * @param strDomain     Type of Domain
+     * @param strEntity    Entity of AI data
+     * @param intYear      The year of data
+     * @param strDay       Day of datapoint
+     * @param intParameter Number of parametere
+     * @param strDomain    Type of Domain
      * 
      */
-    public data(String strEntity, int intYear, String strDay, int intParameters, String strDomain) {
+    public data(String strEntity, int intYear, String strDay, int intParameter, String strDomain) {
         this.strEntity = strEntity;
         this.intYear = intYear;
         this.strDay = strDay;
-        this.intParameters = intParameters;
+        this.intParameter = intParameter;
         this.strDomain = strDomain;
     }
 
@@ -48,12 +48,32 @@ public class data {
     }
 
     /*
-     * Get number of publications
+     * Get day of publications
      * 
-     * @return publications
+     * @return day
      * 
      */
-    public int getNumberPub() {
-        return this.intNumberPub;
+    public String getDay() {
+        return this.strDay;
+    }
+
+    /*
+     * Get parameter of datapoint
+     * 
+     * @return parameter
+     * 
+     */
+    public int getParameter() {
+        return this.intParameter;
+    }
+
+    /*
+     * Get domain of datapoint
+     * 
+     * @return domain
+     * 
+     */
+    public String getDomain() {
+        return this.strDomain;
     }
 }
