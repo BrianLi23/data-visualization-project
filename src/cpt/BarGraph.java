@@ -8,6 +8,9 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,7 +22,28 @@ public class BarGraph extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        primaryStage.setTitle("Bar Graph from ArrayList");
+        primaryStage.setTitle("JavaFX Showcase Application");
+
+        // Create a TabPane to hold the tabs
+        TabPane tabPane = new TabPane();
+
+        // Create a tab for the graph
+        Tab graphTab = new Tab("Graph");
+        graphTab.setContent(createGraphView());
+
+        // Add the tabs to the TabPane
+        tabPane.getTabs().addAll(graphTab);
+
+        // Create a VBox to hold the TabPane
+        VBox vbox = new VBox(tabPane);
+
+        // Create a scene and set it to the stage
+        Scene scene = new Scene(vbox, 800, 600);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private BarChart<String, Number> createGraphView() throws IOException {
 
         // Define axes
         CategoryAxis xAxis = new CategoryAxis();
@@ -27,7 +51,7 @@ public class BarGraph extends Application {
 
         // Create the bar chart
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        barChart.setTitle("Data from ArrayList");
+        barChart.setTitle("Number of parameters in notable artificial intelligence systems");
 
         // Read data from the ArrayList
         ObservableList<XYChart.Data<String, Number>> data = getDataFromArrayList();
@@ -38,10 +62,7 @@ public class BarGraph extends Application {
         // Add the series to the bar chart
         barChart.getData().add(series);
 
-        // Create a scene and set it to the stage
-        Scene scene = new Scene(barChart, 800, 600);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        return barChart;
     }
 
     private ObservableList<XYChart.Data<String, Number>> getDataFromArrayList() throws IOException {
