@@ -11,7 +11,12 @@ public class listData {
     private static ArrayList<data> listofData = new ArrayList<data>();
 
     public listData() throws IOException {
+
+    }
+
+    public static ArrayList<data> getDataPoints() throws IOException {
         readData();
+        return listofData;
     }
 
     public static void readData() throws IOException {
@@ -45,7 +50,7 @@ public class listData {
         listofData.add(dataInput);
     }
 
-    public void sortYear(boolean boolReverse) {
+    public static void sortYear(boolean boolReverse, ArrayList<data>) {
         if (boolReverse) {
             mergeSort(listofData, "year", true);
         }
