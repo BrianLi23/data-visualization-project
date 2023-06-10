@@ -5,20 +5,26 @@ public class data {
     // Private instance variable
     private String strEntity;
     private int intYear;
-    private int intNumberPub;
+    private String strDay;
+    private int intParameters;
+    private String strDomain;
 
     /**
      * Constructor for data
      * 
-     * @param strEntity    Entity of AI data
-     * @param intYear      The year of data
-     * @param intNumberPub Number of publications
+     * @param strEntity     Entity of AI data
+     * @param intYear       The year of data
+     * @param strDay        Day of datapoint
+     * @param intParameters Number of parameteres
+     * @param strDomain     Type of Domain
      * 
      */
-    public data(String strEntity, int intYear, int intNumberPub) {
+    public data(String strEntity, int intYear, String strDay, int intParameters, String strDomain) {
         this.strEntity = strEntity;
         this.intYear = intYear;
-        this.intNumberPub = intNumberPub;
+        this.strDay = strDay;
+        this.intParameters = intParameters;
+        this.strDomain = strDomain;
     }
 
     /*
