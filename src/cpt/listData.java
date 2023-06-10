@@ -65,6 +65,36 @@ public class listData {
         }
     }
 
+    public void sortParameter(boolean boolReverse) {
+        if (boolReverse) {
+            mergeSort(listofData, "parameter", true);
+        }
+
+        else {
+            mergeSort(listofData, "parameter", false);
+        }
+    }
+
+    public void sortDay(boolean boolReverse) {
+        if (boolReverse) {
+            mergeSort(listofData, "day", true);
+        }
+
+        else {
+            mergeSort(listofData, "day", false);
+        }
+    }
+
+    public void sortDomain(boolean boolReverse) {
+        if (boolReverse) {
+            mergeSort(listofData, "domain", true);
+        }
+
+        else {
+            mergeSort(listofData, "domain", false);
+        }
+    }
+
     public data getElement(int intNumber) {
         return listofData.get(intNumber);
     }

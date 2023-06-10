@@ -17,18 +17,18 @@ public class main {
 
         System.out.println("-");
 
-        completeData.sortEntity(false);
+        completeData.sortParameter(false);
 
         for (int i = 0; i < 20; i++) {
-            System.out.println(completeData.getElement(i).getEntity());
+            System.out.println(completeData.getElement(i).getParameter());
         }
 
         System.out.println("-");
 
-        completeData.sortEntity(true);
+        completeData.sortDomain(true);
 
         for (int i = 0; i < 20; i++) {
-            System.out.println(completeData.getElement(i).getEntity());
+            System.out.println(completeData.getElement(i).getDomain());
         }
     }
 
