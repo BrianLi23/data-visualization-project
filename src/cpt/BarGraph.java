@@ -24,39 +24,12 @@ import java.math.BigInteger;
 
 public class BarGraph extends Application {
 
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-        primaryStage.setTitle("JavaFX Showcase Application");
-
-        // Create a TabPane to hold the tabs
-        TabPane tabPane = new TabPane();
-
-        // Create a tab for the table
-        Tab tableTab = new Tab("Table");
-        tableTab.setContent(createTableView());
-
-        // Create a tab for the graph
-        Tab graphTab = new Tab("Graph");
-        graphTab.setContent(createGraphView());
-
-        // Add the tabs to the TabPane
-        tabPane.getTabs().addAll(tableTab, graphTab);
-
-        // Create a VBox to hold the TabPane
-        VBox vbox = new VBox(tabPane);
-
-        // Create a scene and set it to the stage
-        Scene scene = new Scene(vbox, 1000, 1000);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    private VBox createGraphView() throws IOException {
-
-        // Define axes
+    public BarGraph() {
+        // Define axes of graph
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
 
+        // Import data from CSV File using listData class
         ArrayList<data> dataPoints = listData.getDataPoints();
 
         // Create the bar chart
@@ -84,9 +57,14 @@ public class BarGraph extends Application {
 
         // Create a list of checkboxes
         ArrayList<CheckBox> checkboxList = new ArrayList<>();
+
+        // For each datapoint, a new checkbox is created for it
         for (data dataPoint : dataPoints) {
             CheckBox checkbox = new CheckBox(dataPoint.getEntity());
-            checkbox.setSelected(false); // Set initially selected
+
+            // Set each checkbox as unclicked
+            checkbox.setSelected(false);
+
             checkbox.setOnAction(event -> updateGraphVisibility(barChart, dataPoint, checkbox.isSelected()));
             checkboxList.add(checkbox);
         }
@@ -109,93 +87,29 @@ public class BarGraph extends Application {
         return vbox;
     }
 
-    private void filterCheckboxes(String searchText, List<CheckBox> checkboxes) {
-        for (CheckBox checkbox : checkboxes) {
-            String checkboxText = checkbox.getText();
-            checkbox.setVisible(checkboxText.toLowerCase().contains(searchText.toLowerCase()));
-        }
-    }
+    /**
+     * The method used to create the visuals of the graph
+     * 
+     * @author Brian Li
+     */
+    private VBox createGraphView() throws IOException {
 
-    private void updateGraphVisibility(BarChart<String, Number> chart, data dataPoint, boolean isVisible) {
-        // Find the corresponding series based on the data point
-        XYChart.Series<String, Number> series = null;
-        for (XYChart.Series<String, Number> s : chart.getData()) {
-            if (s.getName().equals(dataPoint.getEntity())) {
-                series = s;
-                break;
-            }
-        }
+        // Define axes of graph
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
 
-        if (series != null) {
-            // Update the visibility of the series based on the checkbox selection
-            if (isVisible && !chart.getData().contains(series)) {
-                chart.getData().add(series);
-            } else if (!isVisible && chart.getData().contains(series)) {
-                chart.getData().remove(series);
-            }
-        }
-    }
+        // Import data from CSV File using listData class
+        ArrayList<data> dataPoints = listData.getDataPoints();
 
-    private VBox createTableView() throws IOException {
+        // Create the bar chart
+        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setPrefWidth(1000);
+        barChart.setPrefHeight(1000);
 
-        TableView<data> tableView = new TableView<>();
-
-        // Create columns for the table
-        TableColumn<data, Integer> yearColumn = new TableColumn<>("Year");
-        yearColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getYear()).asObject());
-
-        TableColumn<data, String> entityColumn = new TableColumn<>("Entity");
-        entityColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEntity()));
-
-        TableColumn<data, String> parameterColumn = new TableColumn<>("Parameter");
-        parameterColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getParameter()));
-
-        TableColumn<data, String> domainColumn = new TableColumn<>("Domain");
-        domainColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDomain()));
-
-        TableColumn<data, String> dayColumn = new TableColumn<>("Day");
-        dayColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDay()));
-
-        // Add columns to the table
-        tableView.getColumns().addAll(yearColumn, entityColumn, parameterColumn, domainColumn, dayColumn);
-
-        ArrayList<data> chartData = listData.getDataPoints();
-        sorting.sortYear(false, chartData);
-
-        // Create data for the table
-        ObservableList<data> tableData = FXCollections.observableArrayList(chartData);
-
-        // Set the data to the table
-        tableView.setItems(tableData);
-
-        // Set width of table columns
-        yearColumn.setPrefWidth(100);
-        entityColumn.setPrefWidth(200);
-        parameterColumn.setPrefWidth(200);
-        domainColumn.setPrefWidth(150);
-        dayColumn.setPrefWidth(150);
-
-        Button sortButton = new Button("Sort Data by Year");
-        sortButton.setOnAction(event -> {
-            System.out.println("pressed");
-            sorting.sortEntity(false, chartData);
-            tableView.setItems(tableData);
-            tableView.refresh();
-        });
-
-        // Create a VBox to hold the table view and sorting controls
-        VBox vbox = new VBox(10); // Set spacing between table and controls
-        vbox.getChildren().addAll(tableView, sortButton);
-
-        return vbox;
-    }
-
-    private ObservableList<XYChart.Data<String, Number>> getDataFromArrayList() throws IOException {
+        barChart.setTitle("Number of parameters in notable artificial intelligence systems");
 
         ObservableList<XYChart.Data<String, Number>> data = FXCollections.observableArrayList();
 
-        // Retrieve the ArrayList object from the DataPointProvider class
-        ArrayList<data> dataPoints = listData.getDataPoints();
         sorting.sortEntity(true, dataPoints);
 
         for (data specificData : dataPoints) {
@@ -219,10 +133,110 @@ public class BarGraph extends Application {
             }
         }
 
-        return data;
+        // Create a series for the bar chart
+        XYChart.Series<String, Number> series = new XYChart.Series<>(data);
+
+        // Add the series to the bar chart
+        barChart.getData().add(series);
+
+        // Create a VBox to hold the bar chart
+        VBox vbox = new VBox(0); // Set spacing between bar chart
+
+        FlowPane container = new FlowPane(30, 10); // Set horizontal and vertical spacing between checkboxes
+        container.setPrefWrapLength(400); // Set preferred width of the FlowPane (adjust as needed)
+        container.setPadding(new Insets(10, 30, 10, 30));
+
+        // Create a list of checkboxes
+        ArrayList<CheckBox> checkboxList = new ArrayList<>();
+
+        // For each datapoint, a new checkbox is created for it
+        for (data dataPoint : dataPoints) {
+            CheckBox checkbox = new CheckBox(dataPoint.getEntity());
+
+            // Set each checkbox as unclicked
+            checkbox.setSelected(false);
+
+            checkbox.setOnAction(event -> updateGraphVisibility(barChart, dataPoint, checkbox.isSelected()));
+            checkboxList.add(checkbox);
+        }
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search"); // Set a prompt text for the search field
+        searchField.textProperty()
+                .addListener((observable, oldValue, newValue) -> filterCheckboxes(newValue, checkboxList));
+
+        // Add checkboxes to the FlowPane
+        container.getChildren().addAll(checkboxList);
+
+        ScrollPane scrollPane = new ScrollPane(container);
+        scrollPane.setPrefViewportHeight(200);
+        scrollPane.setFitToWidth(true); // Allow the ScrollPane to fit the width of the VBox
+
+        // Add the bar chart and the checkbox container to the VBox
+        vbox.getChildren().addAll(barChart, searchField, scrollPane);
+
+        return vbox;
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    /**
+     * Void method used to filter the checkboxes to see if it contains the string
+     * inputted
+     * 
+     * @author Brian Li
+     */
+    private void filterCheckboxes(String searchText, List<CheckBox> checkboxes) {
+        for (CheckBox checkbox : checkboxes) {
+            String checkboxText = checkbox.getText();
+            checkbox.setVisible(checkboxText.toLowerCase().contains(searchText.toLowerCase()));
+        }
+    }
+
+    /**
+     * Void method that update graph based on whats
+     * 
+     * @author Brian Li
+     */
+    private void updateGraphVisibility(BarChart<String, Number> chart, data dataPoint, boolean isVisible) {
+
+        // Clear the bar chart
+        barChart.getData().clear();
+
+        // Check if any checkbox is selected
+        boolean anySelected = false;
+        for (CheckBox checkbox : checkboxes) {
+            if (checkbox.isSelected()) {
+                anySelected = true;
+                break;
+            }
+        }
+
+        // If no checkbox is selected, return
+        if (!anySelected) {
+            return;
+        }
+
+        // Add data to the bar chart for selected checkboxes
+        for (CheckBox checkbox : checkboxes) {
+            if (checkbox.isSelected()) {
+                String parameter = checkbox.getText();
+                XYChart.Series<String, Number> series = new XYChart.Series<>();
+                series.setName(parameter);
+
+                // Add data points for the selected parameter
+                for (DataPoint dataPoint : dataPoints) {
+                    if (dataPoint.getParameter().equals(parameter)) {
+                        series.getData().add(new XYChart.Data<>(dataPoint.getYear(), dataPoint.getValue()));
+                    }
+                }
+
+                // Add the series to the bar chart
+                barChart.getData().add(series);
+            }
+        }
+    }
+
+    private ObservableList<XYChart.Data<String, Number>> getDataFromArrayList() throws IOException {
+
+        return data;
     }
 }

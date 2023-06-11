@@ -5,7 +5,14 @@ import java.util.ArrayList;
 public class sorting {
 
     /*
-     * Merge sort takes in an array and returns the same array, sorted.
+     * Static void method that performs mergesort on an list and returns the sorted
+     * version of the list
+     * 
+     * @param lister list being sorted
+     * 
+     * @param strProperty property to sort the list by (Year, day, entity, etc.)
+     * 
+     * @param boolValue boolean value to sort list ascending or descending
      */
     public static void mergeSort(ArrayList<data> lister, String strProperty, boolean boolValue) {
 
@@ -95,6 +102,12 @@ public class sorting {
         }
     }
 
+    /*
+     * Method that sorts list by year returns a sorted list
+     * 
+     * @param boolReverse boolean value to check if you want to
+     * 
+     */
     public static void sortYear(boolean boolReverse, ArrayList<data> sortingList) {
         if (boolReverse) {
             mergeSort(sortingList, "year", true);
