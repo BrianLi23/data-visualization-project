@@ -41,14 +41,15 @@ public class main extends Application {
         TabPane tabPane = new TabPane();
 
         // Creating tab for table and graphs
-        Tab tableTab = new Tab("Table");
-        tableTab.setContent(createTableView());
+        // Tab tableTab = new Tab("Table");
+        // tableTab.setContent(createTableView());
 
         Tab graphTab = new Tab("Graph");
-        graphTab.setContent(createGraphView());
+        BarGraph barGraph = new BarGraph();
+        graphTab.setContent(barGraph.createGraphView());
 
         // Adding tabs to the TabPane
-        tabPane.getTabs().addAll(graphTab, tableTab);
+        tabPane.getTabs().addAll(graphTab);
 
         // Create a VBox to hold the TabPane
         VBox vbox = new VBox(tabPane);
