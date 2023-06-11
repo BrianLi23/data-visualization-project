@@ -12,6 +12,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -56,16 +57,14 @@ public class BarGraph extends Application {
         CategoryAxis xAxis = new CategoryAxis();
         NumberAxis yAxis = new NumberAxis();
 
+        ArrayList<data> dataPoints = listData.getDataPoints();
+
         // Create the bar chart
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
         barChart.setPrefWidth(1000);
         barChart.setPrefHeight(1000);
 
         barChart.setTitle("Number of parameters in notable artificial intelligence systems");
-
-        // Create a VBox to hold the bar chart
-        VBox vbox = new VBox(10); // Set spacing between bar chart
-        vbox.getChildren().addAll(barChart);
 
         // Read data from the ArrayList
         ObservableList<XYChart.Data<String, Number>> data = getDataFromArrayList();
@@ -76,7 +75,65 @@ public class BarGraph extends Application {
         // Add the series to the bar chart
         barChart.getData().add(series);
 
-        return barChart;
+        // Create a VBox to hold the bar chart
+        VBox vbox = new VBox(0); // Set spacing between bar chart
+
+        FlowPane container = new FlowPane(30, 10); // Set horizontal and vertical spacing between checkboxes
+        container.setPrefWrapLength(400); // Set preferred width of the FlowPane (adjust as needed)
+        container.setPadding(new Insets(10, 30, 10, 30));
+
+        // Create a list of checkboxes
+        ArrayList<CheckBox> checkboxList = new ArrayList<>();
+        for (data dataPoint : dataPoints) {
+            CheckBox checkbox = new CheckBox(dataPoint.getEntity());
+            checkbox.setSelected(false); // Set initially selected
+            checkbox.setOnAction(event -> updateGraphVisibility(barChart, dataPoint, checkbox.isSelected()));
+            checkboxList.add(checkbox);
+        }
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search"); // Set a prompt text for the search field
+        searchField.textProperty()
+                .addListener((observable, oldValue, newValue) -> filterCheckboxes(newValue, checkboxList));
+
+        // Add checkboxes to the FlowPane
+        container.getChildren().addAll(checkboxList);
+
+        ScrollPane scrollPane = new ScrollPane(container);
+        scrollPane.setPrefViewportHeight(200);
+        scrollPane.setFitToWidth(true); // Allow the ScrollPane to fit the width of the VBox
+
+        // Add the bar chart and the checkbox container to the VBox
+        vbox.getChildren().addAll(barChart, searchField, scrollPane);
+
+        return vbox;
+    }
+
+    private void filterCheckboxes(String searchText, List<CheckBox> checkboxes) {
+        for (CheckBox checkbox : checkboxes) {
+            String checkboxText = checkbox.getText();
+            checkbox.setVisible(checkboxText.toLowerCase().contains(searchText.toLowerCase()));
+        }
+    }
+
+    private void updateGraphVisibility(BarChart<String, Number> chart, data dataPoint, boolean isVisible) {
+        // Find the corresponding series based on the data point
+        XYChart.Series<String, Number> series = null;
+        for (XYChart.Series<String, Number> s : chart.getData()) {
+            if (s.getName().equals(dataPoint.getEntity())) {
+                series = s;
+                break;
+            }
+        }
+
+        if (series != null) {
+            // Update the visibility of the series based on the checkbox selection
+            if (isVisible && !chart.getData().contains(series)) {
+                chart.getData().add(series);
+            } else if (!isVisible && chart.getData().contains(series)) {
+                chart.getData().remove(series);
+            }
+        }
     }
 
     private VBox createTableView() throws IOException {
