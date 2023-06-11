@@ -22,89 +22,30 @@ import java.util.List;
 import java.io.IOException;
 import java.math.BigInteger;
 
-public class BarGraph extends Application {
+public class BarGraph {
 
-    public BarGraph() {
-        // Define axes of graph
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
+    // Initialize private instance variables
 
-        // Import data from CSV File using listData class
-        ArrayList<data> dataPoints = listData.getDataPoints();
+    // Create VBoxes for bargraph
+    private VBox VBoxBarGraph = new VBox(0);
 
-        // Create the bar chart
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+    // Define axes of graph
+    private CategoryAxis xAxis = new CategoryAxis();
+    private NumberAxis yAxis = new NumberAxis();
+
+    // Import data from CSV File using listData class
+    private ArrayList<data> dataPoints = listData.getDataPoints();
+
+    // Create graph
+    private BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+
+    // Create a list of checkboxes
+    ArrayList<CheckBox> checkboxList = new ArrayList<>();
+
+    public BarGraph() throws IOException {
+
         barChart.setPrefWidth(1000);
-        barChart.setPrefHeight(1000);
-
-        barChart.setTitle("Number of parameters in notable artificial intelligence systems");
-
-        // Read data from the ArrayList
-        ObservableList<XYChart.Data<String, Number>> data = getDataFromArrayList();
-
-        // Create a series for the bar chart
-        XYChart.Series<String, Number> series = new XYChart.Series<>(data);
-
-        // Add the series to the bar chart
-        barChart.getData().add(series);
-
-        // Create a VBox to hold the bar chart
-        VBox vbox = new VBox(0); // Set spacing between bar chart
-
-        FlowPane container = new FlowPane(30, 10); // Set horizontal and vertical spacing between checkboxes
-        container.setPrefWrapLength(400); // Set preferred width of the FlowPane (adjust as needed)
-        container.setPadding(new Insets(10, 30, 10, 30));
-
-        // Create a list of checkboxes
-        ArrayList<CheckBox> checkboxList = new ArrayList<>();
-
-        // For each datapoint, a new checkbox is created for it
-        for (data dataPoint : dataPoints) {
-            CheckBox checkbox = new CheckBox(dataPoint.getEntity());
-
-            // Set each checkbox as unclicked
-            checkbox.setSelected(false);
-
-            checkbox.setOnAction(event -> updateGraphVisibility(barChart, dataPoint, checkbox.isSelected()));
-            checkboxList.add(checkbox);
-        }
-
-        TextField searchField = new TextField();
-        searchField.setPromptText("Search"); // Set a prompt text for the search field
-        searchField.textProperty()
-                .addListener((observable, oldValue, newValue) -> filterCheckboxes(newValue, checkboxList));
-
-        // Add checkboxes to the FlowPane
-        container.getChildren().addAll(checkboxList);
-
-        ScrollPane scrollPane = new ScrollPane(container);
-        scrollPane.setPrefViewportHeight(200);
-        scrollPane.setFitToWidth(true); // Allow the ScrollPane to fit the width of the VBox
-
-        // Add the bar chart and the checkbox container to the VBox
-        vbox.getChildren().addAll(barChart, searchField, scrollPane);
-
-        return vbox;
-    }
-
-    /**
-     * The method used to create the visuals of the graph
-     * 
-     * @author Brian Li
-     */
-    private VBox createGraphView() throws IOException {
-
-        // Define axes of graph
-        CategoryAxis xAxis = new CategoryAxis();
-        NumberAxis yAxis = new NumberAxis();
-
-        // Import data from CSV File using listData class
-        ArrayList<data> dataPoints = listData.getDataPoints();
-
-        // Create the bar chart
-        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        barChart.setPrefWidth(1000);
-        barChart.setPrefHeight(1000);
+        barChart.setPrefHeight(650);
 
         barChart.setTitle("Number of parameters in notable artificial intelligence systems");
 
@@ -139,15 +80,9 @@ public class BarGraph extends Application {
         // Add the series to the bar chart
         barChart.getData().add(series);
 
-        // Create a VBox to hold the bar chart
-        VBox vbox = new VBox(0); // Set spacing between bar chart
-
         FlowPane container = new FlowPane(30, 10); // Set horizontal and vertical spacing between checkboxes
         container.setPrefWrapLength(400); // Set preferred width of the FlowPane (adjust as needed)
-        container.setPadding(new Insets(10, 30, 10, 30));
-
-        // Create a list of checkboxes
-        ArrayList<CheckBox> checkboxList = new ArrayList<>();
+        container.setPadding(new Insets(10, 30, 30, 30));
 
         // For each datapoint, a new checkbox is created for it
         for (data dataPoint : dataPoints) {
@@ -156,7 +91,7 @@ public class BarGraph extends Application {
             // Set each checkbox as unclicked
             checkbox.setSelected(false);
 
-            checkbox.setOnAction(event -> updateGraphVisibility(barChart, dataPoint, checkbox.isSelected()));
+            checkbox.setOnAction(event -> updateGraphVisibility(barChart, checkbox.isSelected()));
             checkboxList.add(checkbox);
         }
 
@@ -173,9 +108,17 @@ public class BarGraph extends Application {
         scrollPane.setFitToWidth(true); // Allow the ScrollPane to fit the width of the VBox
 
         // Add the bar chart and the checkbox container to the VBox
-        vbox.getChildren().addAll(barChart, searchField, scrollPane);
+        VBoxBarGraph.getChildren().addAll(barChart, searchField, scrollPane);
+    }
 
-        return vbox;
+    /**
+     * The method used to return the graph created in a VBox for the main file to
+     * display
+     * 
+     * @author Brian Li
+     */
+    public VBox createGraphView() throws IOException {
+        return VBoxBarGraph;
     }
 
     /**
@@ -184,26 +127,29 @@ public class BarGraph extends Application {
      * 
      * @author Brian Li
      */
-    private void filterCheckboxes(String searchText, List<CheckBox> checkboxes) {
+    private void filterCheckboxes(String searchText, List<CheckBox> checkboxes, FlowPane Container) {
+
+        // Using linear search to check every individual checkbox
         for (CheckBox checkbox : checkboxes) {
             String checkboxText = checkbox.getText();
             checkbox.setVisible(checkboxText.toLowerCase().contains(searchText.toLowerCase()));
+            container.getChildren().add(checkbox);
         }
     }
 
     /**
-     * Void method that update graph based on whats
+     * Void method that update graph based on whats selected by the checkbox
      * 
      * @author Brian Li
      */
-    private void updateGraphVisibility(BarChart<String, Number> chart, data dataPoint, boolean isVisible) {
+    private void updateGraphVisibility(BarChart<String, Number> chart, boolean isVisible) {
 
         // Clear the bar chart
         barChart.getData().clear();
 
         // Check if any checkbox is selected
         boolean anySelected = false;
-        for (CheckBox checkbox : checkboxes) {
+        for (CheckBox checkbox : checkboxList) {
             if (checkbox.isSelected()) {
                 anySelected = true;
                 break;
@@ -216,16 +162,17 @@ public class BarGraph extends Application {
         }
 
         // Add data to the bar chart for selected checkboxes
-        for (CheckBox checkbox : checkboxes) {
+        for (CheckBox checkbox : checkboxList) {
             if (checkbox.isSelected()) {
                 String parameter = checkbox.getText();
                 XYChart.Series<String, Number> series = new XYChart.Series<>();
                 series.setName(parameter);
 
                 // Add data points for the selected parameter
-                for (DataPoint dataPoint : dataPoints) {
+                for (data dataPoint : dataPoints) {
                     if (dataPoint.getParameter().equals(parameter)) {
-                        series.getData().add(new XYChart.Data<>(dataPoint.getYear(), dataPoint.getValue()));
+                        series.getData()
+                                .add(new XYChart.Data<String, Number>(dataPoint.getEntity(), dataPoint.getYear()));
                     }
                 }
 
@@ -235,8 +182,4 @@ public class BarGraph extends Application {
         }
     }
 
-    private ObservableList<XYChart.Data<String, Number>> getDataFromArrayList() throws IOException {
-
-        return data;
-    }
 }
