@@ -7,18 +7,28 @@ import javafx.beans.property.BooleanProperty;
 
 public class listData {
 
-    // Create array list of data
+    // Create instance variable of list of data
     private static ArrayList<data> listofData = new ArrayList<data>();
 
+    // Constructor for the class
     public listData() throws IOException {
 
     }
 
+    /*
+     * Static method that adds data to list of data
+     * 
+     * @return list of data
+     */
     public static ArrayList<data> getDataPoints() throws IOException {
         readData();
         return listofData;
     }
 
+    /*
+     * Void method that reads data from csv file and adds datapoints to list
+     * 
+     */
     public static void readData() throws IOException {
 
         // Text file input
@@ -27,7 +37,7 @@ public class listData {
         String strTextFile = "";
         String[] tempArray;
 
-        // Read the heading first
+        // Read the heading first (Skip over it)
         strTextFile = reader.readLine();
 
         // Using while loop to read each line of text file, if readline returns null,
@@ -46,14 +56,31 @@ public class listData {
         reader.close();
     }
 
+    /*
+     * Void method adds data to list of data
+     * 
+     * @param data to add
+     */
     public static void addData(data dataInput) {
         listofData.add(dataInput);
     }
 
+    /*
+     * Method returns element of list of data from its index
+     * 
+     * @param index to check
+     * 
+     * @return element of list
+     */
     public data getElement(int intNumber) {
         return listofData.get(intNumber);
     }
 
+    /*
+     * Method returns size of data
+     * 
+     * @return size of list
+     */
     public int getSize() {
         return listofData.size();
     }
