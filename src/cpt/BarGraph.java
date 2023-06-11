@@ -6,11 +6,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
@@ -48,7 +50,7 @@ public class BarGraph extends Application {
         primaryStage.show();
     }
 
-    private BarChart<String, Number> createGraphView() throws IOException {
+    private VBox createGraphView() throws IOException {
 
         // Define axes
         CategoryAxis xAxis = new CategoryAxis();
@@ -56,10 +58,14 @@ public class BarGraph extends Application {
 
         // Create the bar chart
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        barChart.setPrefWidth(1000); // Set preferred width
-        barChart.setPrefHeight(1000); // Set preferred height
+        barChart.setPrefWidth(1000);
+        barChart.setPrefHeight(1000);
 
         barChart.setTitle("Number of parameters in notable artificial intelligence systems");
+
+        // Create a VBox to hold the bar chart
+        VBox vbox = new VBox(10); // Set spacing between bar chart
+        vbox.getChildren().addAll(barChart);
 
         // Read data from the ArrayList
         ObservableList<XYChart.Data<String, Number>> data = getDataFromArrayList();
@@ -73,7 +79,7 @@ public class BarGraph extends Application {
         return barChart;
     }
 
-    private TableView<data> createTableView() throws IOException {
+    private VBox createTableView() throws IOException {
 
         TableView<data> tableView = new TableView<>();
 
@@ -96,13 +102,35 @@ public class BarGraph extends Application {
         // Add columns to the table
         tableView.getColumns().addAll(yearColumn, entityColumn, parameterColumn, domainColumn, dayColumn);
 
+        ArrayList<data> chartData = listData.getDataPoints();
+        sorting.sortYear(false, chartData);
+
         // Create data for the table
-        ObservableList<data> tableData = FXCollections.observableArrayList(listData.getDataPoints());
+        ObservableList<data> tableData = FXCollections.observableArrayList(chartData);
 
         // Set the data to the table
         tableView.setItems(tableData);
 
-        return tableView;
+        // Set width of table columns
+        yearColumn.setPrefWidth(100);
+        entityColumn.setPrefWidth(200);
+        parameterColumn.setPrefWidth(200);
+        domainColumn.setPrefWidth(150);
+        dayColumn.setPrefWidth(150);
+
+        Button sortButton = new Button("Sort Data by Year");
+        sortButton.setOnAction(event -> {
+            System.out.println("pressed");
+            sorting.sortEntity(false, chartData);
+            tableView.setItems(tableData);
+            tableView.refresh();
+        });
+
+        // Create a VBox to hold the table view and sorting controls
+        VBox vbox = new VBox(10); // Set spacing between table and controls
+        vbox.getChildren().addAll(tableView, sortButton);
+
+        return vbox;
     }
 
     private ObservableList<XYChart.Data<String, Number>> getDataFromArrayList() throws IOException {
