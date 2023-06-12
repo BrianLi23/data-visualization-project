@@ -41,21 +41,22 @@ public class main extends Application {
         TabPane tabPane = new TabPane();
 
         // Creating tab for table and graphs
-        // Tab tableTab = new Tab("Table");
-        // tableTab.setContent(createTableView());
+        Tab tableTab = new Tab("Table");
+        Table Tabler = new Table();
+        tableTab.setContent(Tabler.createTableView());
 
         Tab graphTab = new Tab("Graph");
         BarGraph barGraph = new BarGraph();
         graphTab.setContent(barGraph.createGraphView());
 
         // Adding tabs to the TabPane
-        tabPane.getTabs().addAll(graphTab);
+        tabPane.getTabs().addAll(graphTab, tableTab);
 
         // Create a VBox to hold the TabPane
         VBox vbox = new VBox(tabPane);
 
         // Create a scene and set it to the stage
-        Scene scene = new Scene(vbox, 1000, 1000);
+        Scene scene = new Scene(vbox, 1200, 1000);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.application.Application;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -16,6 +15,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -32,9 +32,13 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 public class Table {
-    private VBox createTableView() throws IOException {
 
-        TableView<data> tableView = new TableView<>();
+    TableView<data> tableView = new TableView<>();
+
+    // Create a VBox to hold the table view and sorting controls
+    VBox VBoxTable = new VBox(15); // Set spacing between table and controls
+
+    public Table() throws IOException {
 
         // Create columns for the table
         TableColumn<data, Integer> yearColumn = new TableColumn<>("Year");
@@ -70,19 +74,33 @@ public class Table {
         parameterColumn.setPrefWidth(200);
         domainColumn.setPrefWidth(150);
         dayColumn.setPrefWidth(150);
+        tableView.setPrefHeight(800);
+
+        // Create a label for the table title
+        Label titleLabel = new Label("Data Table");
+        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
         Button sortButton = new Button("Sort Data by Year");
         sortButton.setOnAction(event -> {
-            System.out.println("pressed");
+
             sorting.sortEntity(false, chartData);
-            tableView.setItems(tableData);
+            ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
+            tableView.setItems(newTableData);
             tableView.refresh();
         });
 
-        // Create a VBox to hold the table view and sorting controls
-        VBox vbox = new VBox(10); // Set spacing between table and controls
-        vbox.getChildren().addAll(tableView, sortButton);
+        VBoxTable.setAlignment(Pos.CENTER);
 
-        return vbox;
+        VBoxTable.getChildren().addAll(titleLabel, tableView, sortButton);
+    }
+
+    /**
+     * The method used to return the graph created in a VBox for the main file to
+     * display
+     * 
+     * @author Brian Li
+     */
+    public VBox createTableView() throws IOException {
+        return VBoxTable;
     }
 }
