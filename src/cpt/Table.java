@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -26,12 +27,20 @@ public class Table {
     private ChoiceBox<String> sortOptions = new ChoiceBox<>();
     ArrayList<data> chartData = listData.getDataPoints();
 
+    // Boolean Variables to keep track if it's clicked again for reverse
+    boolean boolEntityReverse = false;
+    boolean boolYearReverse = false;
+    boolean boolParameterReverse = false;
+    boolean boolDomainReverse = false;
+    boolean boolDayReverse = false;
+
     // Hold the table and drop menu inside a hbox
     // Set up the layout
-    HBox HBoxTable = new HBox(10);
+    HBox TableHBox = new HBox(10);
 
-    // Create a VBox to hold the table view and sorting controls
-    VBox VBox = new VBox(15); // Set spacing between table and controls
+    // Create a VBox to everything in place
+    VBox WholeVBox = new VBox(15); // Set spacing between title and table/controls
+    VBox ControlVBox = new VBox(15);
 
     public Table() throws IOException {
 
@@ -54,8 +63,6 @@ public class Table {
         // Add columns to the table
         tableView.getColumns().addAll(yearColumn, entityColumn, parameterColumn, domainColumn, dayColumn);
 
-        sorting.sortYear(false, chartData);
-
         // Create data for the table
         ObservableList<data> tableData = FXCollections.observableArrayList(chartData);
 
@@ -70,12 +77,12 @@ public class Table {
         dayColumn.setPrefWidth(150);
         tableView.setPrefHeight(800);
 
-        // Set spacing between the elements in the VBox
-        VBox.setSpacing(20);
+        // Set spacing between the elements in the WholeVBox
+        WholeVBox.setSpacing(20);
 
         // Set padding around the elements in the HBox
-        VBox.setPadding(new Insets(20));
-        HBoxTable.setPadding(new Insets(20));
+        WholeVBox.setPadding(new Insets(20));
+        TableHBox.setPadding(new Insets(20));
 
         // Create a label for the table title
         Label titleLabel = new Label("Number of parameters in notable artificial intelligence systems");
@@ -90,35 +97,67 @@ public class Table {
         // Add listener to sort the table when an option is selected
         sortOptions.setOnAction(event -> {
             String selectedOption = sortOptions.getValue();
-            if (selectedOption.equals("Entity")) {
-                sorting.sortEntity(false, chartData);
+            if (selectedOption.equals("Sort by Entity")) {
+
+                if (!boolEntityReverse) {
+                    sorting.sortEntity(false, chartData);
+                    boolEntityReverse = true;
+                }
+
+                else {
+                    sorting.sortEntity(true, chartData);
+                    boolEntityReverse = false;
+                }
+
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
                 tableView.setItems(newTableData);
                 tableView.refresh();
             }
 
-            else if (selectedOption.equals("Year")) {
-                sorting.sortYear(false, chartData);
+            else if (selectedOption.equals("Sort by Year")) {
+
+                if (!boolYearReverse) {
+                    sorting.sortYear(false, chartData);
+                    boolYearReverse = true;
+                }
+
+                else {
+                    sorting.sortYear(true, chartData);
+                    boolYearReverse = false;
+                }
+
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
                 tableView.setItems(newTableData);
                 tableView.refresh();
             }
 
-            else if (selectedOption.equals("Parameter")) {
-                sorting.sortParameter(false, chartData);
+            else if (selectedOption.equals("Sort by Parameter")) {
+
+                if (!boolEntityReverse) {
+                    sorting.sortEntity(false, chartData);
+                    boolEntityReverse = true;
+                }
+
+                else {
+                    sorting.sortEntity(true, chartData);
+                    boolEntityReverse = false;
+                }
+
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
                 tableView.setItems(newTableData);
                 tableView.refresh();
             }
 
-            else if (selectedOption.equals("Domain")) {
+            else if (selectedOption.equals("Sort by Domain")) {
+
                 sorting.sortDomain(false, chartData);
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
                 tableView.setItems(newTableData);
                 tableView.refresh();
             }
 
-            else if (selectedOption.equals("Day")) {
+            else if (selectedOption.equals("Sort by Day")) {
+
                 sorting.sortDay(false, chartData);
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
                 tableView.setItems(newTableData);
@@ -126,9 +165,33 @@ public class Table {
             }
         });
 
-        HBoxTable.getChildren().addAll(tableView, sortOptions);
-        HBoxTable.setPadding(new Insets(20));
-        VBox.getChildren().addAll(titleLabel, HBoxTable);
+        // Create a filtered list to hold the filtered data based on search criteria
+        FilteredList<data> filteredData = new FilteredList<>(tableData);
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Seach Artificial Intelligence Systems:"); // Set a prompt text for the search field
+        searchField.textProperty()
+                .addListener((observable, oldValue, newValue) -> {// Update the filtered list based on the search
+                                                                  // criteria
+                    filteredData.setPredicate(data -> {
+                        // Apply your search logic here
+                        // For example, check if the entity or any other relevant field contains the
+                        // search text
+                        String searchText = newValue.toLowerCase();
+                        if (data.getEntity().toLowerCase().contains(searchText)) {
+                            return true;
+                        }
+                        // Add more conditions for other fields if necessary
+                        return false;
+                    });
+                });
+
+        tableView.setItems(filteredData);
+
+        ControlVBox.getChildren().addAll(searchField, sortOptions);
+        TableHBox.getChildren().addAll(tableView, ControlVBox);
+        WholeVBox.getChildren().addAll(titleLabel, TableHBox);
+
     }
 
     /**
@@ -138,6 +201,6 @@ public class Table {
      * @author Brian Li
      */
     public VBox createTableView() throws IOException {
-        return VBox;
+        return WholeVBox;
     }
 }
