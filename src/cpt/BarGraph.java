@@ -45,6 +45,10 @@ public class BarGraph {
 
     public BarGraph() throws IOException {
 
+        // Set labels for x and y axis
+        xAxis.setLabel("Artificial Intelligence Systems");
+        yAxis.setLabel("Parameters (Log Increments | 10^n)");
+
         barChart.setPrefWidth(1000);
         barChart.setPrefHeight(650);
 
@@ -102,7 +106,7 @@ public class BarGraph {
         }
 
         TextField searchField = new TextField();
-        searchField.setPromptText("Seach Artificial Intelligence Systems"); // Set a prompt text for the search field
+        searchField.setPromptText("Seach Artificial Intelligence Systems:"); // Set a prompt text for the search field
         searchField.textProperty()
                 .addListener((observable, oldValue, newValue) -> filterCheckboxes(newValue, checkboxList, container));
 

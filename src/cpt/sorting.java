@@ -29,7 +29,9 @@ public class sorting {
 
         if (boolValue) {
             merge(lister, left, right, strProperty, true); // Merge the sorted sublists
-        } else {
+        }
+
+        else {
             merge(lister, left, right, strProperty, false); // Merge the sorted sublists
         }
     }

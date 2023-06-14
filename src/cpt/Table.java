@@ -8,35 +8,30 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.VBox;
-import javafx.application.Application;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
 import java.math.BigInteger;
 
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+
 public class Table {
 
-    TableView<data> tableView = new TableView<>();
+    // Creating instance variable
+    private TableView<data> tableView = new TableView<>();
+    private ChoiceBox<String> sortOptions = new ChoiceBox<>();
+    ArrayList<data> chartData = listData.getDataPoints();
+
+    // Hold the table and drop menu inside a hbox
+    // Set up the layout
+    HBox HBoxTable = new HBox(10);
 
     // Create a VBox to hold the table view and sorting controls
-    VBox VBoxTable = new VBox(15); // Set spacing between table and controls
+    VBox VBox = new VBox(15); // Set spacing between table and controls
 
     public Table() throws IOException {
 
@@ -59,7 +54,6 @@ public class Table {
         // Add columns to the table
         tableView.getColumns().addAll(yearColumn, entityColumn, parameterColumn, domainColumn, dayColumn);
 
-        ArrayList<data> chartData = listData.getDataPoints();
         sorting.sortYear(false, chartData);
 
         // Create data for the table
@@ -72,26 +66,69 @@ public class Table {
         yearColumn.setPrefWidth(100);
         entityColumn.setPrefWidth(200);
         parameterColumn.setPrefWidth(200);
-        domainColumn.setPrefWidth(150);
+        domainColumn.setPrefWidth(200);
         dayColumn.setPrefWidth(150);
         tableView.setPrefHeight(800);
 
+        // Set spacing between the elements in the VBox
+        VBox.setSpacing(20);
+
+        // Set padding around the elements in the HBox
+        VBox.setPadding(new Insets(20));
+        HBoxTable.setPadding(new Insets(20));
+
         // Create a label for the table title
-        Label titleLabel = new Label("Data Table");
+        Label titleLabel = new Label("Number of parameters in notable artificial intelligence systems");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-        Button sortButton = new Button("Sort Data by Year");
-        sortButton.setOnAction(event -> {
+        // Add sort options to the choice box
+        sortOptions.getItems().addAll("Sort by Entity", "Sort by Year", "Sort by Parameter", "Sort by Domain",
+                "Sort by Day");
 
-            sorting.sortEntity(false, chartData);
-            ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
-            tableView.setItems(newTableData);
-            tableView.refresh();
+        sortOptions.setPrefWidth(300);
+
+        // Add listener to sort the table when an option is selected
+        sortOptions.setOnAction(event -> {
+            String selectedOption = sortOptions.getValue();
+            if (selectedOption.equals("Entity")) {
+                sorting.sortEntity(false, chartData);
+                ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
+                tableView.setItems(newTableData);
+                tableView.refresh();
+            }
+
+            else if (selectedOption.equals("Year")) {
+                sorting.sortYear(false, chartData);
+                ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
+                tableView.setItems(newTableData);
+                tableView.refresh();
+            }
+
+            else if (selectedOption.equals("Parameter")) {
+                sorting.sortParameter(false, chartData);
+                ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
+                tableView.setItems(newTableData);
+                tableView.refresh();
+            }
+
+            else if (selectedOption.equals("Domain")) {
+                sorting.sortDomain(false, chartData);
+                ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
+                tableView.setItems(newTableData);
+                tableView.refresh();
+            }
+
+            else if (selectedOption.equals("Day")) {
+                sorting.sortDay(false, chartData);
+                ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
+                tableView.setItems(newTableData);
+                tableView.refresh();
+            }
         });
 
-        VBoxTable.setAlignment(Pos.CENTER);
-
-        VBoxTable.getChildren().addAll(titleLabel, tableView, sortButton);
+        HBoxTable.getChildren().addAll(tableView, sortOptions);
+        HBoxTable.setPadding(new Insets(20));
+        VBox.getChildren().addAll(titleLabel, HBoxTable);
     }
 
     /**
@@ -101,6 +138,6 @@ public class Table {
      * @author Brian Li
      */
     public VBox createTableView() throws IOException {
-        return VBoxTable;
+        return VBox;
     }
 }
