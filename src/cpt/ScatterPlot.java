@@ -58,4 +58,14 @@ public class ScatterPlot {
         VBoxScatterPlot.getChildren().addAll(scatterChart);
     }
 
+    /**
+     * The method used to return the graph created in a VBox for the main file to
+     * display
+     * 
+     * @author Brian Li
+     */
+    public VBox createScatterPlotView() throws IOException {
+        return VBoxScatterPlot;
+    }
+
 }

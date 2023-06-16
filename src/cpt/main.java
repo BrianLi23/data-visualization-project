@@ -49,8 +49,12 @@ public class Main extends Application {
         BarGraph barGraph = new BarGraph();
         graphTab.setContent(barGraph.createGraphView());
 
+        Tab graphTab2 = new Tab("Graph 2");
+        ScatterPlot scatterChart = new ScatterPlot();
+        graphTab2.setContent(scatterChart.createScatterPlotView());
+
         // Adding tabs to the TabPane
-        tabPane.getTabs().addAll(graphTab, tableTab);
+        tabPane.getTabs().addAll(graphTab, graphTab2, tableTab);
 
         // Create a VBox to hold the TabPane
         VBox vbox = new VBox(tabPane);
