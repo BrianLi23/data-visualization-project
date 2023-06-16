@@ -25,7 +25,7 @@ public class Table {
     // Creating instance variable
     private TableView<data> tableView = new TableView<>();
     private ChoiceBox<String> sortOptions = new ChoiceBox<>();
-    ArrayList<data> chartData = listData.getDataPoints();
+    ArrayList<data> chartData = ListData.getDataPoints();
 
     // Boolean Variables to keep track if it's clicked again for reverse
     boolean boolEntityReverse = false;
@@ -118,11 +118,11 @@ public class Table {
             String selectedOption = sortOptions.getValue();
             if (selectedOption.equals("Sort by Entity")) {
                 if (!boolEntityReverse) {
-                    sorting.sortEntity(false, chartData);
+                    Sorting.sortEntity(false, chartData);
                 }
 
                 else {
-                    sorting.sortEntity(true, chartData);
+                    Sorting.sortEntity(true, chartData);
                 }
 
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
@@ -133,11 +133,11 @@ public class Table {
             else if (selectedOption.equals("Sort by Year")) {
 
                 if (!boolYearReverse) {
-                    sorting.sortYear(false, chartData);
+                    Sorting.sortYear(false, chartData);
                 }
 
                 else {
-                    sorting.sortYear(true, chartData);
+                    Sorting.sortYear(true, chartData);
                 }
 
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
@@ -166,11 +166,11 @@ public class Table {
             else if (selectedOption.equals("Sort by Parameter")) {
 
                 if (!boolEntityReverse) {
-                    sorting.sortEntity(false, chartData);
+                    Sorting.sortEntity(false, chartData);
                 }
 
                 else {
-                    sorting.sortEntity(true, chartData);
+                    Sorting.sortEntity(true, chartData);
                 }
 
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
@@ -181,11 +181,11 @@ public class Table {
             else if (selectedOption.equals("Sort by Domain")) {
 
                 if (!boolDomainReverse) {
-                    sorting.sortDomain(false, chartData);
+                    Sorting.sortDomain(false, chartData);
                 }
 
                 else {
-                    sorting.sortDomain(true, chartData);
+                    Sorting.sortDomain(true, chartData);
                 }
 
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
@@ -196,11 +196,11 @@ public class Table {
             else if (selectedOption.equals("Sort by Day")) {
 
                 if (!boolDayReverse) {
-                    sorting.sortDay(false, chartData);
+                    Sorting.sortDay(false, chartData);
                 }
 
                 else {
-                    sorting.sortDay(true, chartData);
+                    Sorting.sortDay(true, chartData);
                 }
 
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);

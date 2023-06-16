@@ -25,7 +25,7 @@ import java.util.List;
 import java.io.IOException;
 import java.math.BigInteger;
 
-public class main extends Application {
+public class Main extends Application {
 
     /**
      * The main class of program. where the graphs, tabs, tables and scenes are

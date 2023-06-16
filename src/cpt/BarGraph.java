@@ -35,7 +35,7 @@ public class BarGraph {
     private NumberAxis yAxis = new NumberAxis();
 
     // Import data from CSV File using listData class
-    private ArrayList<data> dataPoints = listData.getDataPoints();
+    private ArrayList<data> dataPoints = ListData.getDataPoints();
 
     // Create graph
     private BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
@@ -56,7 +56,7 @@ public class BarGraph {
 
         ObservableList<XYChart.Data<String, Number>> data = FXCollections.observableArrayList();
 
-        sorting.sortEntity(true, dataPoints);
+        Sorting.sortEntity(true, dataPoints);
 
         for (data specificData : dataPoints) {
 

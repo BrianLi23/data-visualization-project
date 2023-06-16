@@ -5,13 +5,13 @@ import java.util.*;
 
 import javafx.beans.property.BooleanProperty;
 
-public class listData {
+public class ListData {
 
     // Create instance variable of list of data
     private static ArrayList<data> listofData = new ArrayList<data>();
 
     // Constructor for the class
-    public listData() throws IOException {
+    public ListData() throws IOException {
 
     }
 
