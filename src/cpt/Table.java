@@ -90,23 +90,39 @@ public class Table {
 
         // Add sort options to the choice box
         sortOptions.getItems().addAll("Sort by Entity", "Sort by Year", "Sort by Parameter", "Sort by Domain",
-                "Sort by Day");
+                "Sort by Day", "Sort Ascending/Descending");
 
         sortOptions.setPrefWidth(300);
+
+        // Create a filtered list to hold the filtered data based on search criteria
+        FilteredList<data> filteredData = new FilteredList<>(tableData);
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Seach Artificial Intelligence Systems:"); // Set a prompt text for the search field
+        searchField.textProperty()
+                .addListener((observable, oldValue, newValue) -> {// Update the filtered list based on the search
+                                                                  // criteria
+                    filteredData.setPredicate(data -> {
+                        String searchText = newValue.toLowerCase();
+                        if (data.getEntity().toLowerCase().contains(searchText)) {
+                            return true;
+                        }
+                        return false;
+                    });
+
+                    tableView.setItems(filteredData);
+                });
 
         // Add listener to sort the table when an option is selected
         sortOptions.setOnAction(event -> {
             String selectedOption = sortOptions.getValue();
             if (selectedOption.equals("Sort by Entity")) {
-
                 if (!boolEntityReverse) {
                     sorting.sortEntity(false, chartData);
-                    boolEntityReverse = true;
                 }
 
                 else {
                     sorting.sortEntity(true, chartData);
-                    boolEntityReverse = false;
                 }
 
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
@@ -118,12 +134,10 @@ public class Table {
 
                 if (!boolYearReverse) {
                     sorting.sortYear(false, chartData);
-                    boolYearReverse = true;
                 }
 
                 else {
                     sorting.sortYear(true, chartData);
-                    boolYearReverse = false;
                 }
 
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
@@ -131,16 +145,32 @@ public class Table {
                 tableView.refresh();
             }
 
+            else if (selectedOption.equals("Sort Ascending/Descending")) {
+                if (boolYearReverse) {
+                    boolDayReverse = false;
+                    boolDomainReverse = false;
+                    boolEntityReverse = false;
+                    boolParameterReverse = false;
+                    boolYearReverse = false;
+                }
+
+                else {
+                    boolDayReverse = true;
+                    boolDomainReverse = true;
+                    boolEntityReverse = true;
+                    boolParameterReverse = true;
+                    boolYearReverse = true;
+                }
+            }
+
             else if (selectedOption.equals("Sort by Parameter")) {
 
                 if (!boolEntityReverse) {
                     sorting.sortEntity(false, chartData);
-                    boolEntityReverse = true;
                 }
 
                 else {
                     sorting.sortEntity(true, chartData);
-                    boolEntityReverse = false;
                 }
 
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
@@ -150,7 +180,14 @@ public class Table {
 
             else if (selectedOption.equals("Sort by Domain")) {
 
-                sorting.sortDomain(false, chartData);
+                if (!boolDomainReverse) {
+                    sorting.sortDomain(false, chartData);
+                }
+
+                else {
+                    sorting.sortDomain(true, chartData);
+                }
+
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
                 tableView.setItems(newTableData);
                 tableView.refresh();
@@ -158,35 +195,19 @@ public class Table {
 
             else if (selectedOption.equals("Sort by Day")) {
 
-                sorting.sortDay(false, chartData);
+                if (!boolDayReverse) {
+                    sorting.sortDay(false, chartData);
+                }
+
+                else {
+                    sorting.sortDay(true, chartData);
+                }
+
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
                 tableView.setItems(newTableData);
                 tableView.refresh();
             }
         });
-
-        // Create a filtered list to hold the filtered data based on search criteria
-        FilteredList<data> filteredData = new FilteredList<>(tableData);
-
-        TextField searchField = new TextField();
-        searchField.setPromptText("Seach Artificial Intelligence Systems:"); // Set a prompt text for the search field
-        searchField.textProperty()
-                .addListener((observable, oldValue, newValue) -> {// Update the filtered list based on the search
-                                                                  // criteria
-                    filteredData.setPredicate(data -> {
-                        // Apply your search logic here
-                        // For example, check if the entity or any other relevant field contains the
-                        // search text
-                        String searchText = newValue.toLowerCase();
-                        if (data.getEntity().toLowerCase().contains(searchText)) {
-                            return true;
-                        }
-                        // Add more conditions for other fields if necessary
-                        return false;
-                    });
-                });
-
-        tableView.setItems(filteredData);
 
         ControlVBox.getChildren().addAll(searchField, sortOptions);
         TableHBox.getChildren().addAll(tableView, ControlVBox);
