@@ -51,42 +51,9 @@ public class BarGraph {
 
         barChart.setPrefWidth(1000);
         barChart.setPrefHeight(650);
+        VBoxBarGraph.setPadding(new Insets(10));
 
         barChart.setTitle("Number of parameters in notable artificial intelligence systems");
-
-        ObservableList<XYChart.Data<String, Number>> data = FXCollections.observableArrayList();
-
-        Sorting.sortEntity(true, dataPoints);
-
-        for (data specificData : dataPoints) {
-
-            if (!specificData.getParameter().equals("NA")) {
-
-                // Create a unique identifier for each data point (year + entity + parameter)
-                String identifier = specificData.getYear() + " | " + specificData.getEntity() + " | "
-                        + specificData.getDay();
-
-                // Since number is too big for int, set as BigInteger
-                BigInteger numBig = new BigInteger(specificData.getParameter());
-
-                // Find parameter on logramethic scale. (10^n)
-                double dblParameters = Math.log10(numBig.doubleValue());
-
-                // Create an XYChart. Data object using the identifier and value from each
-                // DataPoint
-                XYChart.Data<String, Number> chartData = new XYChart.Data<>(identifier, dblParameters);
-                data.add(chartData);
-            }
-        }
-
-        // Create a series for the bar chart
-        XYChart.Series<String, Number> series = new XYChart.Series<>(data);
-
-        // Add the series to the bar chart
-        barChart.getData().add(series);
-
-        // Clear the bar chart
-        barChart.getData().clear();
 
         FlowPane container = new FlowPane(30, 10); // Set horizontal and vertical spacing between checkboxes
         container.setPrefWrapLength(415); // Set preferred width of the FlowPane (adjust as needed)
@@ -102,6 +69,7 @@ public class BarGraph {
                 // Set each checkbox as unclicked
                 checkbox.setSelected(false);
                 checkboxList.add(checkbox);
+
             }
         }
 
