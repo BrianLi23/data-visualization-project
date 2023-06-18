@@ -38,6 +38,8 @@ public class ScatterPlot {
 
     public ScatterPlot() throws IOException {
 
+        scatterChart.getStylesheets().add(getClass().getResource("css/scatter-chart.css").toExternalForm());
+
         // Set labels for x and y axis
         xAxis.setLabel("Years");
         yAxis.setLabel("Parameters (Log Increments | 10^n)");

@@ -45,6 +45,8 @@ public class BarGraph {
 
     public BarGraph() throws IOException {
 
+        barChart.getStylesheets().add(getClass().getResource("css/bar-chart.css").toExternalForm());
+
         // Set labels for x and y axis
         xAxis.setLabel("Artificial Intelligence Systems");
         yAxis.setLabel("Parameters (Log Increments | 10^n)");
@@ -63,8 +65,15 @@ public class BarGraph {
         for (data dataPoint : dataPoints) {
             if (!dataPoint.getParameter().equals("NA")) {
                 CheckBox checkbox = new CheckBox(dataPoint.getEntity());
-
-                checkbox.setOnAction(event -> updateGraphVisibility(barChart));
+                checkbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue) {
+                        String entity = checkbox.getText();
+                        updateGraphVisibility(entity);
+                    } else {
+                        String entity = checkbox.getText();
+                        removeDataFromBarChart(entity);
+                    }
+                });
 
                 // Set each checkbox as unclicked
                 checkbox.setSelected(false);
@@ -119,41 +128,58 @@ public class BarGraph {
     }
 
     /**
-     * Void method that update graph based on whats selected by the checkbox
+     * Void method that adds data to graph based on whats selected by the checkbox
+     * 
+     * @param Entity The entity of the checkbox item
      * 
      * @author Brian Li
      */
-    private void updateGraphVisibility(BarChart<String, Number> chart) {
+    private void updateGraphVisibility(String entity) {
 
-        barChart.getData().clear();
+        // Initialize series and setting its name
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName(entity);
 
-        // Add data to the bar chart for selected checkboxes
-        for (CheckBox checkbox : checkboxList) {
-            if (checkbox.isSelected()) {
-                String entity = checkbox.getText();
-                XYChart.Series<String, Number> series = new XYChart.Series<>();
-                series.setName(entity);
+        // Add data points for the selected entity
+        for (data dataPoint : dataPoints) {
+            if (dataPoint.getEntity().equals(entity)) {
+                String identifier = dataPoint.getYear() + " | " + dataPoint.getEntity() + " | " + dataPoint.getDay();
 
-                // Add data points for the selected entity
-                for (data dataPoint : dataPoints) {
-                    if (dataPoint.getEntity().equals(entity)) {
+                // Since the number is too big for int, set as BigInteger
+                BigInteger numBig = new BigInteger(dataPoint.getParameter());
 
-                        String identifier = dataPoint.getYear() + " | " + dataPoint.getEntity() + " | "
-                                + dataPoint.getDay();
+                // Find parameter on the logarithmic scale. (10^n)
+                double dblParameters = Math.log10(numBig.doubleValue());
 
-                        // Since number is too big for int, set as BigInteger
-                        BigInteger numBig = new BigInteger(dataPoint.getParameter());
+                // Add data to series
+                series.getData().add(new XYChart.Data<>(identifier, dblParameters));
+            }
+        }
 
-                        // Find parameter on logramethic scale. (10^n)
-                        double dblParameters = Math.log10(numBig.doubleValue());
+        // Add the series to the bar chart
+        barChart.getData().add(series);
+    }
 
-                        series.getData()
-                                .add(new XYChart.Data<String, Number>(identifier, dblParameters));
-                    }
-                }
+    /**
+     * Void method that REMOVES data from graph based on whats unselected by the
+     * checkbox
+     * 
+     * @param Entity The entity of the checkbox item
+     * 
+     * @author Brian Li
+     */
+    private void removeDataFromBarChart(String entity) {
 
-                // Add the series to the bar chart
-                barChart.getData().add(series);
+        // Initialize an instance of list of series in barchart
+        ObservableList<XYChart.Series<String, Number>> seriesList = barChart.getData();
+
+        // Iterate over series in barchart
+        for (XYChart.Series<String, Number> series : seriesList) {
+
+            // If series equal entity, remove from barchart
+            if (series.getName().equals(entity)) {
+                seriesList.remove(series);
+                break;
             }
         }
     }
