@@ -4,15 +4,17 @@ import java.util.ArrayList;
 
 public class Sorting {
 
-    /*
+    /**
      * Static void method that performs mergesort on an list and returns the sorted
      * version of the list
      * 
-     * @param lister list being sorted
+     * @param lister      list being sorted
      * 
      * @param strProperty property to sort the list by (Year, day, entity, etc.)
      * 
-     * @param boolValue boolean value to sort list ascending or descending
+     * @param boolValue   boolean value to sort list ascending or descending
+     * 
+     * @author Brian Li
      */
     public static void mergeSort(ArrayList<data> lister, String strProperty, boolean boolValue) {
 
@@ -36,6 +38,18 @@ public class Sorting {
         }
     }
 
+    /**
+     * Static void method that merges the left and right side of list based on a
+     * property
+     * 
+     * @param result      List being returned
+     * @param left        Leftside list
+     * @param right       Rightside List
+     * @param strProperty Property to sort list by
+     * @param boolValue   Boolean value determining ascending or descending sort
+     * 
+     * @author Brian Li
+     */
     private static void merge(ArrayList<data> result, ArrayList<data> left, ArrayList<data> right, String strProperty,
             boolean boolValue) {
         int leftIndex = 0;
@@ -104,7 +118,7 @@ public class Sorting {
         }
     }
 
-    /*
+    /**
      * Method that sorts list by year returns a sorted list
      * 
      * @param boolReverse boolean value to check if you want to
@@ -120,6 +134,12 @@ public class Sorting {
         }
     }
 
+    /**
+     * Method that sorts list by entity returns a sorted list
+     * 
+     * @param boolReverse boolean value to check if you want to
+     * 
+     */
     public static void sortEntity(boolean boolReverse, ArrayList<data> sortingList) {
         if (boolReverse) {
             mergeSort(sortingList, "entity", true);
@@ -130,6 +150,12 @@ public class Sorting {
         }
     }
 
+    /**
+     * Method that sorts list by parameter returns a sorted list
+     * 
+     * @param boolReverse boolean value to check if you want to
+     * 
+     */
     public static void sortParameter(boolean boolReverse, ArrayList<data> sortingList) {
         if (boolReverse) {
             mergeSort(sortingList, "parameter", true);
@@ -140,6 +166,12 @@ public class Sorting {
         }
     }
 
+    /**
+     * Method that sorts list by day returns a sorted list
+     * 
+     * @param boolReverse boolean value to check if you want to
+     * 
+     */
     public static void sortDay(boolean boolReverse, ArrayList<data> sortingList) {
         if (boolReverse) {
             mergeSort(sortingList, "day", true);
@@ -150,6 +182,12 @@ public class Sorting {
         }
     }
 
+    /**
+     * Method that sorts list by domain returns a sorted list
+     * 
+     * @param boolReverse boolean value to check if you want to
+     * 
+     */
     public static void sortDomain(boolean boolReverse, ArrayList<data> sortingList) {
         if (boolReverse) {
             mergeSort(sortingList, "domain", true);

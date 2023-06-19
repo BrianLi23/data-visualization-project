@@ -3,20 +3,19 @@ package cpt;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
-
+import java.util.Arrays;
+import java.util.List;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
+import javafx.geometry.Side;
 import org.controlsfx.control.RangeSlider;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.paint.Color;
-import javafx.scene.Node;
-import javafx.scene.shape.Circle;
 
 public class ScatterPlot {
 
@@ -33,11 +32,22 @@ public class ScatterPlot {
     // Import data from CSV File using listData class
     private ArrayList<data> dataPoints = ListData.getDataPoints();
 
-    private static final double MIN_X_VALUE = 1949; // Minimum X-axis value
-    private static final double MAX_X_VALUE = 2024; // Maximum X-axis value
+    // Initialzing minimum and maximum x axis values
+    private static final double MIN_X_VALUE = 1949;
+    private static final double MAX_X_VALUE = 2024;
+
+    // (ATTEMPTED) Due to time could not add legend labeling each datapoint
+    List<String> legendCategories = Arrays.asList("Drawing", "Driving", "Games", "Language", "Multimodal", "Other",
+            "Recommendation", "Search", "Speech", "Video", "Vision");
+    List<Color> legendColors = Arrays.asList(Color.RED, Color.GREEN, Color.BLUE, Color.BLACK, Color.ORANGE, Color.BROWN,
+            Color.PURPLE, Color.YELLOW, Color.NAVY, Color.MAGENTA, Color.MAROON, Color.PINK);
+
+    // Create a series with data point to represent the legend item
+    XYChart.Series<Number, Number> legendSeries = new XYChart.Series<>();
 
     public ScatterPlot() throws IOException {
 
+        // Styling scatter plot using css files
         scatterChart.getStylesheets().add(getClass().getResource("css/scatter-chart.css").toExternalForm());
 
         // Set labels for x and y axis
@@ -58,6 +68,13 @@ public class ScatterPlot {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName("Data Points");
 
+        // (ATTEMPTED) attempted to add legend
+        for (int i = 0; i < legendCategories.size(); i++) {
+            String category = legendCategories.get(i);
+            legendSeries.setName(category);
+
+        }
+
         // Add data points to the series
         for (data specificData : dataPoints) {
 
@@ -75,7 +92,6 @@ public class ScatterPlot {
 
                 // Set the data point object as the extra value for the data point
                 PlotData.setExtraValue(specificData);
-
                 series.getData().add(PlotData);
             }
         }
@@ -83,31 +99,10 @@ public class ScatterPlot {
         // Add the series to the scatter chart
         scatterChart.getData().add(series);
 
-        // Create legend items
-        for (int i = 0; i < 11; i++) {
-            String domain = "Domain " + (i + 1); // Replace with your actual domain values
-
-            // Create a series with a single data point to represent the legend item
-            XYChart.Series<Number, Number> legendSeries = new XYChart.Series<>();
-            legendSeries.getData().add(new XYChart.Data<>(0, 0)); // Add a dummy data point
-            legendSeries.setName(domain);
-
-            // Customize the legend item
-            Node legendNode = legendSeries.getNode();
-            if (legendNode instanceof StackPane) {
-                StackPane legendItem = (StackPane) legendNode;
-
-                // Create a colored circle to represent the legend item
-                Circle symbol = new Circle(5);
-                symbol.setFill(getLegendColor(i)); // Replace with your own color generation logic
-
-                // Add the symbol to the legend item
-                legendItem.getChildren().add(symbol);
-
-                // Add the legend item to the scatter chart
-                scatterChart.getData().add(legendSeries);
-            }
-        }
+        // Setting the legend as visible and below the graph
+        scatterChart.setLegendVisible(true);
+        scatterChart.setLegendSide(Side.BOTTOM);
+        scatterChart.setPadding(new Insets(0, 0, 20, 0));
 
         // Create the range slider for X-axis
         RangeSlider xSlider = new RangeSlider(MIN_X_VALUE, MAX_X_VALUE, MIN_X_VALUE, MAX_X_VALUE);
@@ -156,6 +151,13 @@ public class ScatterPlot {
         return VBoxScatterPlot;
     }
 
+    /**
+     * The method used to return a string containing the datapoint information for
+     * the label
+     * 
+     * @param point Datapoint to use
+     * @author Brian Li
+     */
     private String getDataPointParameters(data point) {
         String entity = point.getEntity();
         String parameter = point.getParameter();
@@ -165,25 +167,6 @@ public class ScatterPlot {
 
         return "Entity: " + entity + "\nParameter: " + parameter + "\nYear: " + year + "\nDay: " + day + "\nDomain: "
                 + domain;
-    }
-
-    private Color getLegendColor(int index) {
-        // Replace with your own color generation logic
-        Color[] colors = {
-                Color.RED,
-                Color.GREEN,
-                Color.BLUE,
-                Color.YELLOW,
-                Color.ORANGE,
-                Color.PURPLE,
-                Color.CYAN,
-                Color.MAGENTA,
-                Color.PINK,
-                Color.GRAY,
-                Color.BROWN
-        };
-
-        return colors[index % colors.length];
     }
 
 }

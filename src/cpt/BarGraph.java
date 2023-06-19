@@ -1,22 +1,13 @@
 package cpt;
 
-import javafx.application.Application;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.scene.control.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +17,6 @@ import java.math.BigInteger;
 public class BarGraph {
 
     // Initialize private instance variables
-
     // Create VBoxes for bargraph
     private VBox VBoxBarGraph = new VBox(0);
 
@@ -45,31 +35,42 @@ public class BarGraph {
 
     public BarGraph() throws IOException {
 
+        // Styling bar graph using css files
         barChart.getStylesheets().add(getClass().getResource("css/bar-chart.css").toExternalForm());
 
         // Set labels for x and y axis
         xAxis.setLabel("Artificial Intelligence Systems");
         yAxis.setLabel("Parameters (Log Increments | 10^n)");
 
+        // Setting padding, height and width
         barChart.setPrefWidth(1000);
         barChart.setPrefHeight(650);
         VBoxBarGraph.setPadding(new Insets(10));
 
+        // Set title
         barChart.setTitle("Number of parameters in notable artificial intelligence systems");
 
-        FlowPane container = new FlowPane(30, 10); // Set horizontal and vertical spacing between checkboxes
-        container.setPrefWrapLength(415); // Set preferred width of the FlowPane (adjust as needed)
+        // Setting space between checkboxes
+        FlowPane container = new FlowPane(30, 10);
+
+        // Setting padding and width of flowpane
+        container.setPrefWrapLength(415);
         container.setPadding(new Insets(10, 30, 30, 30));
 
         // For each datapoint, a new checkbox is created for it
         for (data dataPoint : dataPoints) {
             if (!dataPoint.getParameter().equals("NA")) {
+
+                // Using property and listener, check if checkbox is checked to add or remove
+                // data
                 CheckBox checkbox = new CheckBox(dataPoint.getEntity());
                 checkbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
                     if (newValue) {
                         String entity = checkbox.getText();
                         updateGraphVisibility(entity);
-                    } else {
+                    }
+
+                    else {
                         String entity = checkbox.getText();
                         removeDataFromBarChart(entity);
                     }
@@ -82,17 +83,23 @@ public class BarGraph {
             }
         }
 
+        // Add search field
         TextField searchField = new TextField();
-        searchField.setPromptText("Seach Artificial Intelligence Systems:"); // Set a prompt text for the search field
+        searchField.setPromptText("Seach Artificial Intelligence Systems:"); // Setting prompt text
+
+        // Using listener to use filerCheckBozes method
         searchField.textProperty()
                 .addListener((observable, oldValue, newValue) -> filterCheckboxes(newValue, checkboxList, container));
 
         // Add checkboxes to the FlowPane
         container.getChildren().addAll(checkboxList);
 
+        // Creating scroll pane and properties
         ScrollPane scrollPane = new ScrollPane(container);
         scrollPane.setPrefViewportHeight(250);
-        scrollPane.setFitToWidth(true); // Allow the ScrollPane to fit the width of the VBox
+
+        // Fitting scrollpane to VBox
+        scrollPane.setFitToWidth(true);
 
         // Add the bar chart and the checkbox container to the VBox
         VBoxBarGraph.getChildren().addAll(barChart, searchField, scrollPane);
@@ -113,9 +120,15 @@ public class BarGraph {
      * Void method used to filter the checkboxes to see if it contains the string
      * inputted
      * 
+     * @param searchText The string entered in search
+     * @param checkboxes List of checkboxes
+     * @param container  Flowpane contianer of checkboxes
+     * 
      * @author Brian Li
      */
     private void filterCheckboxes(String searchText, List<CheckBox> checkboxes, FlowPane container) {
+
+        // Clear flowpane
         container.getChildren().clear();
 
         // Using linear search to check every individual checkbox

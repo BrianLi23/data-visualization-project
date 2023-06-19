@@ -1,29 +1,12 @@
 package cpt;
 
-import java.io.*;
-import java.util.*;
-import java.lang.Math;
 import javafx.application.Application;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.io.IOException;
-import java.math.BigInteger;
 
 public class Main extends Application {
 
@@ -45,11 +28,11 @@ public class Main extends Application {
         Table Tabler = new Table();
         tableTab.setContent(Tabler.createTableView());
 
-        Tab graphTab = new Tab("Graph");
+        Tab graphTab = new Tab("Bar Graph");
         BarGraph barGraph = new BarGraph();
         graphTab.setContent(barGraph.createGraphView());
 
-        Tab graphTab2 = new Tab("Graph 2");
+        Tab graphTab2 = new Tab("Scatter Plot");
         ScatterPlot scatterChart = new ScatterPlot();
         graphTab2.setContent(scatterChart.createScatterPlotView());
 

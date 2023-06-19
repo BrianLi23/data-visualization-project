@@ -12,17 +12,10 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import java.util.ArrayList;
-import java.util.List;
-import java.io.IOException;
-import java.math.BigInteger;
-
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 
 public class Table {
 
-    // Creating instance variable
+    // Creating instance variables
     private TableView<data> tableView = new TableView<>();
     private ChoiceBox<String> sortOptions = new ChoiceBox<>();
     ArrayList<data> chartData = ListData.getDataPoints();
@@ -35,11 +28,10 @@ public class Table {
     boolean boolDayReverse = false;
 
     // Hold the table and drop menu inside a hbox
-    // Set up the layout
-    HBox TableHBox = new HBox(10);
+    HBox TableHBox = new HBox(10); // Set spacing in hbox
 
     // Create a VBox to everything in place
-    VBox WholeVBox = new VBox(15); // Set spacing between title and table/controls
+    VBox WholeVBox = new VBox(15); // Set spacing in vbox
     VBox ControlVBox = new VBox(15);
 
     public Table() throws IOException {
@@ -97,11 +89,13 @@ public class Table {
         // Create a filtered list to hold the filtered data based on search criteria
         FilteredList<data> filteredData = new FilteredList<>(tableData);
 
+        // Add a search field
         TextField searchField = new TextField();
         searchField.setPromptText("Seach Artificial Intelligence Systems:"); // Set a prompt text for the search field
+
+        // Updating the filtered list based on the search criteria
         searchField.textProperty()
-                .addListener((observable, oldValue, newValue) -> {// Update the filtered list based on the search
-                                                                  // criteria
+                .addListener((observable, oldValue, newValue) -> {
                     filteredData.setPredicate(data -> {
                         String searchText = newValue.toLowerCase();
                         if (data.getEntity().toLowerCase().contains(searchText)) {
@@ -115,6 +109,8 @@ public class Table {
 
         // Add listener to sort the table when an option is selected
         sortOptions.setOnAction(event -> {
+
+            // Check which option is selected and sort accordingly
             String selectedOption = sortOptions.getValue();
             if (selectedOption.equals("Sort by Entity")) {
                 if (!boolEntityReverse) {

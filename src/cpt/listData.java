@@ -3,8 +3,6 @@ package cpt;
 import java.io.*;
 import java.util.*;
 
-import javafx.beans.property.BooleanProperty;
-
 public class ListData {
 
     // Create instance variable of list of data
