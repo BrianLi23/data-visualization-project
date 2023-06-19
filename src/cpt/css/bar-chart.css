@@ -1,0 +1,7 @@
+.chart-series-line {
+  -fx-stroke: black;
+}
+
+.chart-title {
+  -fx-font-weight: bold;
+}
