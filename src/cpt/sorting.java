@@ -2,7 +2,7 @@ package cpt;
 
 import java.util.ArrayList;
 
-public class Sorting {
+public class sorting {
 
     /**
      * Static void method that performs mergesort on an list and returns the sorted

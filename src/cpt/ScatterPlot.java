@@ -30,7 +30,7 @@ public class ScatterPlot {
     private ScatterChart<Number, Number> scatterChart = new ScatterChart<>(xAxis, yAxis);
 
     // Import data from CSV File using listData class
-    private ArrayList<data> dataPoints = ListData.getDataPoints();
+    private ArrayList<data> dataPoints = listData.getDataPoints();
 
     // Initialzing minimum and maximum x axis values
     private static final double MIN_X_VALUE = 1949;

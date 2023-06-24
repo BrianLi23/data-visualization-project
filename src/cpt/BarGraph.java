@@ -25,7 +25,7 @@ public class BarGraph {
     private NumberAxis yAxis = new NumberAxis();
 
     // Import data from CSV File using listData class
-    private ArrayList<data> dataPoints = ListData.getDataPoints();
+    private ArrayList<data> dataPoints = listData.getDataPoints();
 
     // Create graph
     private BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);

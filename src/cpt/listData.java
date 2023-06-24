@@ -3,13 +3,13 @@ package cpt;
 import java.io.*;
 import java.util.*;
 
-public class ListData {
+public class listData {
 
     // Create instance variable of list of data
     private static ArrayList<data> listofData = new ArrayList<data>();
 
     // Constructor for the class
-    public ListData() throws IOException {
+    public listData() throws IOException {
 
     }
 

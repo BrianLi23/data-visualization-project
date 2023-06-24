@@ -8,7 +8,7 @@ import javafx.scene.control.*;
 
 import java.io.IOException;
 
-public class Main extends Application {
+public class main extends Application {
 
     /**
      * The main class of program. where the graphs, tabs, tables and scenes are
