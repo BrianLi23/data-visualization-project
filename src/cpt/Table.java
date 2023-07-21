@@ -162,11 +162,11 @@ public class Table {
             else if (selectedOption.equals("Sort by Parameter")) {
 
                 if (!boolEntityReverse) {
-                    sorting.sortEntity(false, chartData);
+                    sorting.sortParameter(false, chartData);
                 }
 
                 else {
-                    sorting.sortEntity(true, chartData);
+                    sorting.sortParameter(true, chartData);
                 }
 
                 ObservableList<data> newTableData = FXCollections.observableArrayList(chartData);
