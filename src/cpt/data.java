@@ -1,12 +1,14 @@
 package cpt;
 
+import java.math.BigInteger;
+
 public class data {
 
     // Private instance variable
     private String strEntity;
     private int intYear;
     private String strDay;
-    private String strParameter;
+    private BigInteger bigIntParameter;
     private String strDomain;
 
     /**
@@ -19,11 +21,11 @@ public class data {
      * @param strDomain    Type of Domain
      * 
      */
-    public data(String strEntity, int intYear, String strDay, String strParameter, String strDomain) {
+    public data(String strEntity, int intYear, String strDay, BigInteger bigIntParameter, String strDomain) {
         this.strEntity = strEntity;
         this.intYear = intYear;
         this.strDay = strDay;
-        this.strParameter = strParameter;
+        this.bigIntParameter = bigIntParameter;
         this.strDomain = strDomain;
     }
 
@@ -63,8 +65,8 @@ public class data {
      * @return parameter
      * 
      */
-    public String getParameter() {
-        return this.strParameter;
+    public BigInteger getParameter() {
+        return this.bigIntParameter;
     }
 
     /*

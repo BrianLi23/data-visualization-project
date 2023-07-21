@@ -1,6 +1,7 @@
 package cpt;
 
 import java.io.*;
+import java.math.BigInteger;
 import java.util.*;
 
 public class listData {
@@ -31,7 +32,7 @@ public class listData {
 
         // Text file input
         BufferedReader reader = new BufferedReader(new FileReader(
-                "C:/Users/brian/github-classroom/SACHSTech/ics4u-cpt-brian-li-solo/src/cpt/datasheet.csv"));
+                "C:/Users/brian/data-visualization-project/data-visualization-project/src/cpt/datasheet.csv"));
         String strTextFile = "";
         String[] tempArray;
 
@@ -45,7 +46,7 @@ public class listData {
             if (strTextFile != null) {
                 tempArray = strTextFile.split(",");
                 data datapoint = new data(tempArray[0], Integer.parseInt(tempArray[1]), tempArray[2],
-                        tempArray[3], tempArray[4]);
+                        new BigInteger(tempArray[3]), tempArray[4]);
                 addData(datapoint);
             }
         }

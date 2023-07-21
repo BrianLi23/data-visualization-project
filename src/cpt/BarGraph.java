@@ -59,28 +59,25 @@ public class BarGraph {
 
         // For each datapoint, a new checkbox is created for it
         for (data dataPoint : dataPoints) {
-            if (!dataPoint.getParameter().equals("NA")) {
 
-                // Using property and listener, check if checkbox is checked to add or remove
-                // data
-                CheckBox checkbox = new CheckBox(dataPoint.getEntity());
-                checkbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                    if (newValue) {
-                        String entity = checkbox.getText();
-                        updateGraphVisibility(entity);
-                    }
+            // Using property and listener, check if checkbox is checked to add or remove
+            // data
+            CheckBox checkbox = new CheckBox(dataPoint.getEntity());
+            checkbox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    String entity = checkbox.getText();
+                    updateGraphVisibility(entity);
+                }
 
-                    else {
-                        String entity = checkbox.getText();
-                        removeDataFromBarChart(entity);
-                    }
-                });
+                else {
+                    String entity = checkbox.getText();
+                    removeDataFromBarChart(entity);
+                }
+            });
 
-                // Set each checkbox as unclicked
-                checkbox.setSelected(false);
-                checkboxList.add(checkbox);
-
-            }
+            // Set each checkbox as unclicked
+            checkbox.setSelected(false);
+            checkboxList.add(checkbox);
         }
 
         // Add search field
@@ -158,11 +155,8 @@ public class BarGraph {
             if (dataPoint.getEntity().equals(entity)) {
                 String identifier = dataPoint.getYear() + " | " + dataPoint.getEntity() + " | " + dataPoint.getDay();
 
-                // Since the number is too big for int, set as BigInteger
-                BigInteger numBig = new BigInteger(dataPoint.getParameter());
-
                 // Find parameter on the logarithmic scale. (10^n)
-                double dblParameters = Math.log10(numBig.doubleValue());
+                double dblParameters = Math.log10(dataPoint.getParameter().doubleValue());
 
                 // Add data to series
                 series.getData().add(new XYChart.Data<>(identifier, dblParameters));

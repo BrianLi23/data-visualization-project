@@ -1,6 +1,7 @@
 package cpt;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import javafx.beans.property.SimpleIntegerProperty;
@@ -8,6 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -43,8 +45,8 @@ public class Table {
         TableColumn<data, String> entityColumn = new TableColumn<>("Entity");
         entityColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEntity()));
 
-        TableColumn<data, String> parameterColumn = new TableColumn<>("Parameter");
-        parameterColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getParameter()));
+        TableColumn<data, BigInteger> parameterColumn = new TableColumn<>("Parameter");
+        parameterColumn.setCellValueFactory(data -> new SimpleObjectProperty(data.getValue().getParameter()));
 
         TableColumn<data, String> domainColumn = new TableColumn<>("Domain");
         domainColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDomain()));

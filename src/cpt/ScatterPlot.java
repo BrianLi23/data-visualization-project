@@ -78,22 +78,16 @@ public class ScatterPlot {
         // Add data points to the series
         for (data specificData : dataPoints) {
 
-            if (!specificData.getParameter().equals("NA")) {
+            // Find parameter on logramethic scale. (10^n)
+            double dblParameters = Math.log10(specificData.getParameter().doubleValue());
 
-                // Since number is too big for int, set as BigInteger
-                BigInteger numBig = new BigInteger(specificData.getParameter());
+            // Create an XYChart. Data object using the identifier and value from each
+            // DataPoint
+            XYChart.Data<Number, Number> PlotData = new XYChart.Data<>(specificData.getYear(), dblParameters);
 
-                // Find parameter on logramethic scale. (10^n)
-                double dblParameters = Math.log10(numBig.doubleValue());
-
-                // Create an XYChart. Data object using the identifier and value from each
-                // DataPoint
-                XYChart.Data<Number, Number> PlotData = new XYChart.Data<>(specificData.getYear(), dblParameters);
-
-                // Set the data point object as the extra value for the data point
-                PlotData.setExtraValue(specificData);
-                series.getData().add(PlotData);
-            }
+            // Set the data point object as the extra value for the data point
+            PlotData.setExtraValue(specificData);
+            series.getData().add(PlotData);
         }
 
         // Add the series to the scatter chart
@@ -160,7 +154,7 @@ public class ScatterPlot {
      */
     private String getDataPointParameters(data point) {
         String entity = point.getEntity();
-        String parameter = point.getParameter();
+        BigInteger parameter = point.getParameter();
         int year = point.getYear();
         String day = point.getDay();
         String domain = point.getDomain();
