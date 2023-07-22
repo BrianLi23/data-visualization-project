@@ -36,11 +36,11 @@ public class ScatterPlot {
     private static final double MIN_X_VALUE = 1949;
     private static final double MAX_X_VALUE = 2024;
 
-    // (ATTEMPTED) Due to time could not add legend labeling each datapoint
     List<String> legendCategories = Arrays.asList("Drawing", "Driving", "Games", "Language", "Multimodal", "Other",
             "Recommendation", "Search", "Speech", "Video", "Vision");
-    List<Color> legendColors = Arrays.asList(Color.RED, Color.GREEN, Color.BLUE, Color.BLACK, Color.ORANGE, Color.BROWN,
-            Color.PURPLE, Color.YELLOW, Color.NAVY, Color.MAGENTA, Color.MAROON, Color.PINK);
+
+    // (MODIFIED) Create a list to store all the domain-specific series
+    List<XYChart.Series<Number, Number>> domainSeriesList = new ArrayList<>();
 
     // Create a series with data point to represent the legend item
     XYChart.Series<Number, Number> legendSeries = new XYChart.Series<>();
@@ -68,11 +68,13 @@ public class ScatterPlot {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
         series.setName("Data Points");
 
-        // (ATTEMPTED) attempted to add legend
+        // (MODIFIED) Create a series for each domain value and add it to the
+        // domainSeriesList
         for (int i = 0; i < legendCategories.size(); i++) {
+            XYChart.Series<Number, Number> domainSeries = new XYChart.Series<>();
             String category = legendCategories.get(i);
-            legendSeries.setName(category);
-
+            domainSeries.setName(category);
+            domainSeriesList.add(domainSeries);
         }
 
         // Add data points to the series
@@ -88,6 +90,18 @@ public class ScatterPlot {
             // Set the data point object as the extra value for the data point
             PlotData.setExtraValue(specificData);
             series.getData().add(PlotData);
+
+            // (MODIFIED) Find the corresponding domain series and add the data point to it
+            int domainIndex = legendCategories.indexOf(specificData.getDomain());
+            if (domainIndex >= 0 && domainIndex < domainSeriesList.size()) {
+                XYChart.Series<Number, Number> domainSeries = domainSeriesList.get(domainIndex);
+                domainSeries.getData().add(PlotData);
+            }
+        }
+
+        // (MODIFIED) Add all the domain-specific series to the scatter chart
+        for (XYChart.Series<Number, Number> domainSeries : domainSeriesList) {
+            scatterChart.getData().add(domainSeries);
         }
 
         // Add the series to the scatter chart
@@ -99,7 +113,8 @@ public class ScatterPlot {
         scatterChart.setPadding(new Insets(0, 0, 20, 0));
 
         // Create the range slider for X-axis
-        RangeSlider xSlider = new RangeSlider(MIN_X_VALUE, MAX_X_VALUE, MIN_X_VALUE, MAX_X_VALUE);
+        RangeSlider xSlider = new RangeSlider(MIN_X_VALUE, MAX_X_VALUE, MIN_X_VALUE,
+                MAX_X_VALUE);
         xSlider.setBlockIncrement(1);
         xSlider.setMinorTickCount(0);
         xSlider.setMajorTickUnit(41);
@@ -161,6 +176,14 @@ public class ScatterPlot {
 
         return "Entity: " + entity + "\nParameter: " + parameter + "\nYear: " + year + "\nDay: " + day + "\nDomain: "
                 + domain;
+    }
+
+    // Helper method to convert Color to RGB string representation
+    private String toRgbString(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
     }
 
 }
