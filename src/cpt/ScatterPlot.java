@@ -39,7 +39,7 @@ public class ScatterPlot {
     List<String> legendCategories = Arrays.asList("Drawing", "Driving", "Games", "Language", "Multimodal", "Other",
             "Recommendation", "Search", "Speech", "Video", "Vision");
 
-    // (MODIFIED) Create a list to store all the domain-specific series
+    // Create a list to store all the domain-specific series
     List<XYChart.Series<Number, Number>> domainSeriesList = new ArrayList<>();
 
     // Create a series with data point to represent the legend item

@@ -36,8 +36,12 @@ public class main extends Application {
         ScatterPlot scatterChart = new ScatterPlot();
         graphTab2.setContent(scatterChart.createScatterPlotView());
 
+        Tab graphTab3 = new Tab("Pie Chart");
+        PieChartx pieChart = new PieChartx();
+        graphTab3.setContent(pieChart.createPieChartView());
+
         // Adding tabs to the TabPane
-        tabPane.getTabs().addAll(graphTab, graphTab2, tableTab);
+        tabPane.getTabs().addAll(graphTab, graphTab2, graphTab3, tableTab);
 
         // Create a VBox to hold the TabPane
         VBox vbox = new VBox(tabPane);
